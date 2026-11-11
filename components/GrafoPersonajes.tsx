@@ -5,8 +5,11 @@ import {
   ReactFlow,
   Background,
   Controls,
+  Handle,
+  Position,
   type Edge,
   type Node,
+  type NodeProps,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
@@ -32,6 +35,33 @@ const colores: Record<Relacion["tipo"], string> = {
   romance: "#c2528b",
 };
 
+type DatosNodo = { nombre: string; central: boolean; estado: "normal" | "activo" | "atenuado" };
+
+function NodoPersonaje({ data }: NodeProps<Node<DatosNodo>>) {
+  const { nombre, central, estado } = data;
+  return (
+    <div
+      className="font-titulo text-center shadow-sm transition-all"
+      style={{
+        padding: central ? "14px 22px" : "10px 16px",
+        fontSize: central ? 16 : 14,
+        fontWeight: central ? 700 : 500,
+        borderRadius: 10,
+        background: estado === "activo" ? "#b8923a" : central ? "#1f3d2f" : "#fbf7ee",
+        color: estado === "activo" ? "#2b2118" : central ? "#fbf7ee" : "#1f3d2f",
+        border: `2px solid ${estado === "activo" ? "#2b2118" : "#b8923a"}`,
+        opacity: estado === "atenuado" ? 0.25 : 1,
+      }}
+    >
+      <Handle type="target" position={Position.Top} style={{ opacity: 0, top: "50%" }} />
+      {nombre}
+      <Handle type="source" position={Position.Top} style={{ opacity: 0, top: "50%" }} />
+    </div>
+  );
+}
+
+const tiposNodo = { personaje: NodoPersonaje };
+
 export default function GrafoPersonajes({
   personajes,
   relaciones,
@@ -48,44 +78,94 @@ export default function GrafoPersonajes({
     [personajes, libroActivo],
   );
 
-  const nodos: Node[] = useMemo(
+  const ids = useMemo(() => new Set(delLibro.map((p) => p.id)), [delLibro]);
+
+  const relacionesLibro = useMemo(
     () =>
-      delLibro.map((p, i) => {
-        const angulo = (2 * Math.PI * i) / delLibro.length;
+      relaciones.filter(
+        (r) => ids.has(r.personaje_a_id) && ids.has(r.personaje_b_id),
+      ),
+    [relaciones, ids],
+  );
+
+  // El personaje con más relaciones va al centro.
+  const centralId = useMemo(() => {
+    const cuenta = new Map<number, number>();
+    relacionesLibro.forEach((r) => {
+      cuenta.set(r.personaje_a_id, (cuenta.get(r.personaje_a_id) ?? 0) + 1);
+      cuenta.set(r.personaje_b_id, (cuenta.get(r.personaje_b_id) ?? 0) + 1);
+    });
+    let mejor = delLibro[0]?.id;
+    let max = -1;
+    delLibro.forEach((p) => {
+      const c = cuenta.get(p.id) ?? 0;
+      if (c > max) {
+        max = c;
+        mejor = p.id;
+      }
+    });
+    return mejor;
+  }, [delLibro, relacionesLibro]);
+
+  const relacionadosConSeleccion = useMemo(() => {
+    const set = new Set<number>();
+    if (seleccionado === null) return set;
+    set.add(seleccionado);
+    relacionesLibro.forEach((r) => {
+      if (r.personaje_a_id === seleccionado) set.add(r.personaje_b_id);
+      if (r.personaje_b_id === seleccionado) set.add(r.personaje_a_id);
+    });
+    return set;
+  }, [seleccionado, relacionesLibro]);
+
+  const nodos: Node<DatosNodo>[] = useMemo(() => {
+    const otros = delLibro.filter((p) => p.id !== centralId);
+    return delLibro.map((p) => {
+      let position = { x: 0, y: 0 };
+      if (p.id !== centralId) {
+        const i = otros.findIndex((o) => o.id === p.id);
+        const angulo = (2 * Math.PI * i) / otros.length - Math.PI / 2;
+        position = { x: 280 * Math.cos(angulo), y: 220 * Math.sin(angulo) };
+      }
+      let estado: DatosNodo["estado"] = "normal";
+      if (seleccionado !== null) {
+        if (p.id === seleccionado) estado = "activo";
+        else if (!relacionadosConSeleccion.has(p.id)) estado = "atenuado";
+      }
+      return {
+        id: String(p.id),
+        type: "personaje",
+        position,
+        data: { nombre: p.nombre, central: p.id === centralId, estado },
+        draggable: true,
+      };
+    });
+  }, [delLibro, centralId, seleccionado, relacionadosConSeleccion]);
+
+  const aristas: Edge[] = useMemo(
+    () =>
+      relacionesLibro.map((r) => {
+        const relacionada =
+          seleccionado === null ||
+          r.personaje_a_id === seleccionado ||
+          r.personaje_b_id === seleccionado;
         return {
-          id: String(p.id),
-          position: {
-            x: 300 + 230 * Math.cos(angulo),
-            y: 250 + 200 * Math.sin(angulo),
-          },
-          data: { label: p.nombre },
+          id: String(r.id),
+          source: String(r.personaje_a_id),
+          target: String(r.personaje_b_id),
+          type: "straight",
           style: {
-            background: seleccionado === p.id ? "#b8923a" : "#f6efe0",
-            border: "2px solid #1f3d2f",
-            borderRadius: 9999,
-            padding: "8px 14px",
-            fontSize: 13,
-            color: "#2b2118",
+            stroke: colores[r.tipo],
+            strokeWidth: relacionada && seleccionado !== null ? 4 : 2.5,
+            opacity: relacionada ? 1 : 0.12,
           },
         };
       }),
-    [delLibro, seleccionado],
+    [relacionesLibro, seleccionado],
   );
 
-  const ids = new Set(delLibro.map((p) => p.id));
-  const aristas: Edge[] = relaciones
-    .filter((r) => ids.has(r.personaje_a_id) && ids.has(r.personaje_b_id))
-    .map((r) => ({
-      id: String(r.id),
-      source: String(r.personaje_a_id),
-      target: String(r.personaje_b_id),
-      label: r.tipo,
-      style: { stroke: colores[r.tipo], strokeWidth: 2 },
-      labelStyle: { fill: colores[r.tipo], fontSize: 11 },
-    }));
-
   const personaje = delLibro.find((p) => p.id === seleccionado);
-  const vinculos = relaciones
+  const vinculos = relacionesLibro
     .filter(
       (r) =>
         r.personaje_a_id === seleccionado || r.personaje_b_id === seleccionado,
@@ -125,11 +205,11 @@ export default function GrafoPersonajes({
         ))}
       </div>
 
-      <div className="mb-4 flex flex-wrap gap-4 text-sm">
+      <div className="mb-4 flex flex-wrap gap-5 text-sm">
         {Object.entries(colores).map(([tipo, color]) => (
-          <span key={tipo} className="flex items-center gap-2 text-cafe">
+          <span key={tipo} className="flex items-center gap-2 capitalize text-cafe">
             <span
-              className="inline-block h-1 w-6 rounded"
+              className="inline-block h-1 w-7 rounded"
               style={{ background: color }}
             />
             {tipo}
@@ -138,40 +218,53 @@ export default function GrafoPersonajes({
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <div className="h-[65vh] rounded-lg border border-arena bg-crema">
+        <div className="h-[65vh] rounded-lg border border-arena bg-pergamino">
           <ReactFlow
             key={libroActivo}
             nodes={nodos}
             edges={aristas}
+            nodeTypes={tiposNodo}
             onNodeClick={(_, nodo) => setSeleccionado(Number(nodo.id))}
+            onPaneClick={() => setSeleccionado(null)}
             fitView
+            fitViewOptions={{ padding: 0.25 }}
             nodesConnectable={false}
+            proOptions={{ hideAttribution: false }}
           >
-            <Background />
+            <Background gap={28} color="#e6d8bb" />
             <Controls showInteractive={false} />
           </ReactFlow>
         </div>
 
-        <aside className="rounded-lg border border-arena bg-pergamino p-5">
+        <aside className="rounded-lg border border-arena bg-crema p-5">
           {personaje ? (
             <>
-              <h2 className="font-titulo text-xl font-bold text-bosque">
+              <h2 className="font-titulo text-2xl font-bold text-bosque">
                 {personaje.nombre}
               </h2>
               <p className="mt-2 text-sm text-cafe">{personaje.descripcion}</p>
-              <h3 className="mt-4 font-semibold text-bosque">Relaciones</h3>
-              <ul className="mt-2 space-y-2 text-sm text-cafe">
+              <h3 className="mt-5 font-semibold text-bosque">Relaciones</h3>
+              <ul className="mt-2 space-y-3 text-sm text-cafe">
                 {vinculos.map((v) => (
-                  <li key={v.id}>
-                    <span style={{ color: colores[v.tipo] }}>●</span>{" "}
-                    <strong>{v.nombre}</strong> ({v.tipo}): {v.descripcion}
+                  <li key={v.id} className="flex gap-2">
+                    <span
+                      className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full"
+                      style={{ background: colores[v.tipo] }}
+                    />
+                    <span>
+                      <strong className="text-tinta">{v.nombre}</strong>{" "}
+                      <span className="capitalize">· {v.tipo}</span>
+                      <br />
+                      {v.descripcion}
+                    </span>
                   </li>
                 ))}
               </ul>
             </>
           ) : (
             <p className="text-sm text-cafe">
-              Haz clic en un personaje para ver su descripción y sus relaciones.
+              Haz clic en un personaje para ver su descripción y resaltar sus
+              relaciones. Haz clic en el fondo para quitar la selección.
             </p>
           )}
         </aside>
