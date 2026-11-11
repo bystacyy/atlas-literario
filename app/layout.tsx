@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Newsreader, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
@@ -37,6 +38,7 @@ export default function RootLayout({
           <Navbar />
         </Suspense>
         {children}
+        <Footer />
       </body>
     </html>
   );
