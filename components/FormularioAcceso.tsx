@@ -56,7 +56,7 @@ export default function FormularioAcceso() {
   }
 
   const campo =
-    "mt-1 w-full rounded-lg border border-arena bg-crema p-3 text-tinta focus:border-dorado focus:outline-none";
+    "mt-1 w-full rounded-xl border border-arena-clara bg-papel p-3 text-mar-oscuro focus:border-mar focus:outline-none";
 
   return (
     <form onSubmit={enviar} className="space-y-4">
@@ -66,10 +66,11 @@ export default function FormularioAcceso() {
             key={m}
             type="button"
             onClick={() => setModo(m)}
-            className={`rounded-full border px-4 py-1.5 text-sm ${
+            aria-pressed={modo === m}
+            className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
               modo === m
-                ? "border-bosque bg-bosque text-crema"
-                : "border-arena bg-pergamino text-cafe hover:border-dorado"
+                ? "border-mar bg-mar text-papel"
+                : "border-arena-clara bg-papel text-texto-suave hover:border-mar"
             }`}
           >
             {m === "entrar" ? "Iniciar sesión" : "Crear cuenta"}
@@ -78,7 +79,7 @@ export default function FormularioAcceso() {
       </div>
 
       {modo === "registrar" && (
-        <label className="block text-sm font-semibold text-bosque">
+        <label className="block text-sm font-semibold text-mar">
           Nombre de usuario
           <input
             type="text"
@@ -92,7 +93,7 @@ export default function FormularioAcceso() {
         </label>
       )}
 
-      <label className="block text-sm font-semibold text-bosque">
+      <label className="block text-sm font-semibold text-mar">
         Correo
         <input
           type="email"
@@ -103,7 +104,7 @@ export default function FormularioAcceso() {
         />
       </label>
 
-      <label className="block text-sm font-semibold text-bosque">
+      <label className="block text-sm font-semibold text-mar">
         Contraseña
         <input
           type="password"
@@ -115,13 +116,21 @@ export default function FormularioAcceso() {
         />
       </label>
 
-      {error && <p className="text-sm text-red-700">{error}</p>}
-      {mensaje && <p className="text-sm text-bosque">{mensaje}</p>}
+      {error && (
+        <p role="alert" className="text-sm text-red-700">
+          {error}
+        </p>
+      )}
+      {mensaje && (
+        <p role="status" className="text-sm text-mar">
+          {mensaje}
+        </p>
+      )}
 
       <button
         type="submit"
         disabled={cargando}
-        className="rounded-full bg-bosque px-6 py-2 font-semibold text-crema hover:opacity-90 disabled:opacity-50"
+        className="inline-flex min-h-12 items-center rounded-full bg-coral px-8 font-bold text-mar-oscuro transition-opacity hover:opacity-90 disabled:opacity-50"
       >
         {cargando
           ? "Procesando..."
