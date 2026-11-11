@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import BotonesLectura from "@/components/BotonesLectura";
 
 async function DetalleLibro({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -27,6 +28,9 @@ async function DetalleLibro({ params }: { params: Promise<{ id: string }> }) {
         {autor?.nombre} ({autor?.pais}) · {libro.anio_publicacion}
       </p>
       <p className="mt-6 max-w-2xl text-cafe">{libro.sinopsis}</p>
+    <div className="mt-6">
+        <BotonesLectura libroId={libro.id} />
+      </div>
     </article>
   );
 }

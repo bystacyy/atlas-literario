@@ -7,6 +7,7 @@ const enlaces = [
   { href: "/personajes", texto: "Personajes" },
   { href: "/recomendador", texto: "Recomendador" },
   { href: "/emociones", texto: "Emociones" },
+  { href: "/biblioteca", texto: "Mi biblioteca" },
 ];
 
 export default function Navbar() {
