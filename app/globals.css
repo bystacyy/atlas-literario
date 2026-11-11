@@ -1,6 +1,15 @@
 @import "tailwindcss";
 
 @theme inline {
+  /* Paleta nueva: Papel y mar */
+  --color-papel: #fcfaf5;
+  --color-mar: #1f5f5b;
+  --color-mar-oscuro: #12312f;
+  --color-coral: #e8735a;
+  --color-arena-clara: #e9dfc8;
+  --color-texto-suave: #3f5654;
+
+  /* Paleta anterior: se mantiene hasta migrar cada página */
   --color-pergamino: #f6efe0;
   --color-crema: #fbf7ee;
   --color-arena: #e6d8bb;
@@ -9,8 +18,8 @@
   --color-bosque: #1f3d2f;
   --color-dorado: #b8923a;
 
-  --font-titulo: var(--font-playfair);
-  --font-texto: var(--font-inter);
+  --font-titulo: var(--font-newsreader);
+  --font-texto: var(--font-dm-sans);
 }
 
 body {
