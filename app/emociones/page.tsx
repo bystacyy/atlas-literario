@@ -5,7 +5,9 @@ import MapaEmocional, { type Momento } from "@/components/MapaEmocional";
 async function EmocionesConDatos() {
   const { data, error } = await supabase
     .from("capitulos")
-    .select("numero, titulo, libros(titulo), datos_emocionales(intensidad, explicacion)")
+    .select(
+      "numero, titulo, libros(titulo), datos_emocionales(intensidad, explicacion)",
+    )
     .order("numero");
 
   if (error) {
@@ -35,13 +37,15 @@ async function EmocionesConDatos() {
 export default function EmocionesPage() {
   return (
     <main className="mx-auto max-w-4xl px-6 py-12">
-      <h1 className="font-titulo text-4xl font-bold text-bosque">
+      <h1 className="font-titulo text-5xl font-semibold text-mar-oscuro">
         Mapa emocional
       </h1>
-      <p className="mt-2 mb-8 text-cafe">
+      <p className="mb-8 mt-3 max-w-xl text-lg text-texto-suave">
         Mira cómo sube y baja la tensión a lo largo de cada novela.
       </p>
-      <Suspense fallback={<p className="text-cafe">Cargando gráfico...</p>}>
+      <Suspense
+        fallback={<p className="text-texto-suave">Cargando gráfico...</p>}
+      >
         <EmocionesConDatos />
       </Suspense>
     </main>
