@@ -67,3 +67,33 @@ insert into lugares (libro_id, nombre, pais, latitud, longitud, descripcion, ord
 ((select id from libros where titulo = 'Moby Dick'), 'Océano Atlántico', 'Océano Atlántico', 20.0000, -35.0000, 'Primer tramo de la travesía del Pequod.', 3),
 ((select id from libros where titulo = 'Moby Dick'), 'Cabo de Buena Esperanza', 'Sudáfrica', -34.3568, 18.4740, 'Cruce hacia el océano Índico.', 4),
 ((select id from libros where titulo = 'Moby Dick'), 'Océano Pacífico', 'Océano Pacífico', 0.0000, -160.0000, 'Escenario del encuentro final con Moby Dick.', 5);
+
+
+-- 4. Personajes
+insert into personajes (libro_id, nombre, descripcion) values
+-- La vuelta al mundo en 80 días
+((select id from libros where titulo = 'La vuelta al mundo en 80 días'), 'Phileas Fogg', 'Caballero inglés metódico que apuesta dar la vuelta al mundo.'),
+((select id from libros where titulo = 'La vuelta al mundo en 80 días'), 'Passepartout', 'Criado francés, leal y ocurrente, que acompaña a Fogg.'),
+((select id from libros where titulo = 'La vuelta al mundo en 80 días'), 'Detective Fix', 'Policía que cree que Fogg es un ladrón y lo persigue.'),
+((select id from libros where titulo = 'La vuelta al mundo en 80 días'), 'Aouda', 'Joven viuda hindú rescatada por Fogg.'),
+-- Don Quijote de la Mancha
+((select id from libros where titulo = 'Don Quijote de la Mancha'), 'Don Quijote', 'Hidalgo que se cree caballero andante.'),
+((select id from libros where titulo = 'Don Quijote de la Mancha'), 'Sancho Panza', 'Labrador sencillo que acompaña a don Quijote como escudero.'),
+((select id from libros where titulo = 'Don Quijote de la Mancha'), 'Dulcinea del Toboso', 'La dama imaginada a quien don Quijote dedica sus hazañas.'),
+((select id from libros where titulo = 'Don Quijote de la Mancha'), 'Sansón Carrasco', 'Bachiller que quiere devolver a don Quijote a su casa.'),
+-- Drácula
+((select id from libros where titulo = 'Drácula'), 'Conde Drácula', 'Vampiro noble de Transilvania.'),
+((select id from libros where titulo = 'Drácula'), 'Jonathan Harker', 'Abogado inglés que visita el castillo del conde.'),
+((select id from libros where titulo = 'Drácula'), 'Mina Murray', 'Prometida y luego esposa de Jonathan, inteligente y valiente.'),
+((select id from libros where titulo = 'Drácula'), 'Lucy Westenra', 'Amiga de Mina, víctima del conde.'),
+((select id from libros where titulo = 'Drácula'), 'Van Helsing', 'Médico y erudito experto en vampiros.'),
+-- Frankenstein
+((select id from libros where titulo = 'Frankenstein'), 'Víctor Frankenstein', 'Joven científico que crea vida.'),
+((select id from libros where titulo = 'Frankenstein'), 'La criatura', 'Ser creado por Víctor, abandonado y solitario.'),
+((select id from libros where titulo = 'Frankenstein'), 'Elizabeth Lavenza', 'Prometida de Víctor, criada con su familia.'),
+((select id from libros where titulo = 'Frankenstein'), 'Henry Clerval', 'Mejor amigo de Víctor.'),
+((select id from libros where titulo = 'Frankenstein'), 'Robert Walton', 'Capitán del Ártico que recoge el relato de Víctor.'),
+-- Moby Dick
+((select id from libros where titulo = 'Moby Dick'), 'Ismael', 'Narrador y marinero del Pequod.'),
+((select id from libros where titulo = 'Moby Dick'), 'Capitán Ahab', 'Capitán obsesionado con vengarse de la ballena blanca.'),
+((select id from libros where titulo = 'Moby Dick'), 'Queequeg', 'Arponero de los Mares del Sur, amigo
