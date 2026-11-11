@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 async function CatalogoLibros() {
@@ -26,7 +27,9 @@ async function CatalogoLibros() {
             className="rounded-lg border border-arena bg-pergamino p-6 shadow-sm"
           >
             <h2 className="font-titulo text-xl font-bold text-bosque">
-              {libro.titulo}
+              <Link href={`/libros/${libro.id}`} className="hover:text-dorado">
+                {libro.titulo}
+              </Link>
             </h2>
             <p className="mt-1 text-sm text-dorado">
               {autor?.nombre} · {libro.anio_publicacion}
