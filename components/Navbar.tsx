@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BotonSesion from "./BotonSesion";
 
 const enlaces = [
   { href: "/libros", texto: "Libros" },
@@ -16,7 +17,7 @@ export default function Navbar() {
           Atlas Literario
         </Link>
 
-        <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <ul className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
           {enlaces.map((enlace) => (
             <li key={enlace.href}>
               <Link
@@ -27,6 +28,9 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
+          <li>
+            <BotonSesion />
+          </li>
         </ul>
       </nav>
     </header>
