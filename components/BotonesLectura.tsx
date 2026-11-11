@@ -83,8 +83,8 @@ export default function BotonesLectura({ libroId }: { libroId: number }) {
 
   if (!usuarioId) {
     return (
-      <p className="text-sm text-cafe">
-        <Link href="/acceso" className="font-semibold text-bosque underline">
+      <p className="text-sm text-texto-suave">
+        <Link href="/acceso" className="font-semibold text-mar underline">
           Inicia sesión
         </Link>{" "}
         para guardar este libro en tu biblioteca.
@@ -93,8 +93,9 @@ export default function BotonesLectura({ libroId }: { libroId: number }) {
   }
 
   const base = "rounded-full border px-4 py-1.5 text-sm transition-colors";
-  const activo = "border-bosque bg-bosque text-crema";
-  const inactivo = "border-arena bg-pergamino text-cafe hover:border-dorado";
+  const activo = "border-mar bg-mar text-papel";
+  const inactivo =
+    "border-arena-clara bg-papel text-texto-suave hover:border-mar";
 
   return (
     <div>
@@ -110,7 +111,7 @@ export default function BotonesLectura({ libroId }: { libroId: number }) {
         ))}
         <button
           onClick={() => guardar(estado ?? "pendiente", !favorito)}
-          className={`${base} ${favorito ? "border-dorado bg-dorado text-tinta" : inactivo}`}
+          className={`${base} ${favorito ? "border-coral bg-coral text-mar-oscuro" : inactivo}`}
         >
           {favorito ? "★ Favorito" : "☆ Favorito"}
         </button>
