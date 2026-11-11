@@ -33,13 +33,13 @@ async function RecomendadorConDatos() {
 export default function RecomendadorPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="font-titulo text-4xl font-bold text-bosque">
-        Recomendador literario
+      <h1 className="font-titulo text-5xl font-semibold text-mar-oscuro">
+        Recomendador
       </h1>
-      <p className="mt-2 mb-8 text-cafe">
+      <p className="mb-8 mt-3 max-w-xl text-lg text-texto-suave">
         Cuéntanos qué buscas y te sugerimos libros del catálogo.
       </p>
-      <Suspense fallback={<p className="text-cafe">Cargando...</p>}>
+      <Suspense fallback={<p className="text-texto-suave">Cargando...</p>}>
         <RecomendadorConDatos />
       </Suspense>
     </main>

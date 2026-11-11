@@ -15,6 +15,14 @@ const ejemplos = [
   "Algo sobre obsesión y venganza en el mar",
 ];
 
+const portadas = [
+  "bg-mar text-papel",
+  "bg-coral text-mar-oscuro",
+  "bg-mar-oscuro text-papel",
+  "border-2 border-mar bg-papel text-mar",
+  "bg-[#2f7a74] text-papel",
+];
+
 export default function Recomendador({
   libros,
 }: {
@@ -35,7 +43,7 @@ export default function Recomendador({
           buscar(texto);
         }}
       >
-        <label htmlFor="deseo" className="block font-semibold text-bosque">
+        <label htmlFor="deseo" className="block font-semibold text-mar">
           ¿Cómo te sientes o qué historia quieres leer?
         </label>
         <textarea
@@ -44,11 +52,11 @@ export default function Recomendador({
           onChange={(e) => setTexto(e.target.value)}
           rows={3}
           placeholder="Ej: quiero una aventura divertida con viajes..."
-          className="mt-2 w-full rounded-lg border border-arena bg-crema p-3 text-tinta focus:border-dorado focus:outline-none"
+          className="mt-2 w-full rounded-xl border border-arena-clara bg-papel p-3 text-mar-oscuro focus:border-mar focus:outline-none"
         />
         <button
           type="submit"
-          className="mt-3 rounded-full bg-bosque px-6 py-2 font-semibold text-crema transition-opacity hover:opacity-90"
+          className="mt-3 inline-flex min-h-12 items-center rounded-full bg-coral px-7 font-bold text-mar-oscuro transition-opacity hover:opacity-90"
         >
           Recomiéndame un libro
         </button>
@@ -62,7 +70,7 @@ export default function Recomendador({
               setTexto(ej);
               buscar(ej);
             }}
-            className="rounded-full border border-arena bg-pergamino px-3 py-1 text-sm text-cafe hover:border-dorado"
+            className="rounded-full border border-arena-clara bg-papel px-3 py-1 text-sm text-texto-suave transition-colors hover:border-mar"
           >
             {ej}
           </button>
@@ -70,39 +78,41 @@ export default function Recomendador({
       </div>
 
       {resultados !== null && (
-        <section className="mt-10">
+        <section className="mt-10" aria-live="polite">
           {resultados.length === 0 ? (
-            <p className="text-cafe">
+            <p className="text-texto-suave">
               No encontré coincidencias. Prueba con palabras como aventura,
               terror, amor, tristeza, humor, mar o filosofía.
             </p>
           ) : (
             <ul className="space-y-5">
               {resultados.map(({ libro, coincidencias }) => (
-                <li
-                  key={libro.id}
-                  className="flex gap-5 rounded-lg border border-arena bg-pergamino p-5"
-                >
-                  <div className="flex h-32 w-24 shrink-0 items-center justify-center rounded bg-bosque font-titulo text-4xl text-dorado">
-                    {libro.titulo.charAt(0)}
-                  </div>
-                  <div>
-                    <h2 className="font-titulo text-xl font-bold text-bosque">
-                      <Link
-                        href={`/libros/${libro.id}`}
-                        className="hover:text-dorado"
-                      >
+                <li key={libro.id}>
+                  <Link
+                    href={`/libros/${libro.id}`}
+                    className="group flex gap-5 rounded-2xl border border-arena-clara bg-papel p-5 transition-colors hover:border-mar"
+                  >
+                    <div
+                      aria-hidden="true"
+                      className={`flex h-32 w-24 shrink-0 items-center justify-center rounded-lg font-titulo text-5xl font-semibold ${portadas[libro.id % portadas.length]}`}
+                    >
+                      {libro.titulo.charAt(0)}
+                    </div>
+                    <div className="min-w-0">
+                      <h2 className="font-titulo text-2xl font-semibold text-mar-oscuro transition-colors group-hover:text-mar">
                         {libro.titulo}
-                      </Link>
-                    </h2>
-                    <p className="text-sm text-dorado">
-                      {libro.autor} · {libro.anio_publicacion}
-                    </p>
-                    <p className="mt-2 text-sm text-cafe">
-                      <strong>Por qué te lo recomiendo:</strong> encaja con lo
-                      que buscas en {coincidencias.join(", ")}.
-                    </p>
-                  </div>
+                      </h2>
+                      <p className="text-sm font-medium text-mar">
+                        {libro.autor} · {libro.anio_publicacion}
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-texto-suave">
+                        <strong className="text-mar-oscuro">
+                          Por qué te lo recomiendo:
+                        </strong>{" "}
+                        encaja con lo que buscas en {coincidencias.join(", ")}.
+                      </p>
+                    </div>
+                  </Link>
                 </li>
               ))}
             </ul>
