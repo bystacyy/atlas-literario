@@ -69,12 +69,14 @@ export default function GeografiaPersonal() {
     cargar();
   }, []);
 
-  if (estado === "cargando") return <p className="text-cafe">Cargando...</p>;
+  if (estado === "cargando") {
+    return <p className="text-texto-suave">Cargando...</p>;
+  }
 
   if (estado === "sin-sesion") {
     return (
-      <p className="text-cafe">
-        <Link href="/acceso" className="font-semibold text-bosque underline">
+      <p className="text-texto-suave">
+        <Link href="/acceso" className="font-semibold text-mar underline">
           Inicia sesión
         </Link>{" "}
         para ver tu geografía literaria.
@@ -86,10 +88,10 @@ export default function GeografiaPersonal() {
 
   if (lugares.length === 0) {
     return (
-      <p className="text-cafe">
+      <p className="text-texto-suave">
         Todavía no hay lugares que mostrar. Marca un libro como{" "}
         <strong>Leído</strong> o <strong>Leyendo</strong> en el{" "}
-        <Link href="/libros" className="font-semibold text-bosque underline">
+        <Link href="/libros" className="font-semibold text-mar underline">
           catálogo
         </Link>{" "}
         y aparecerá aquí.
@@ -106,41 +108,42 @@ export default function GeografiaPersonal() {
     ),
   ).sort();
 
-  const tarjeta = "rounded-lg border border-arena bg-pergamino p-4 text-center";
+  const tarjeta =
+    "rounded-2xl border border-arena-clara bg-papel p-4 text-center";
 
   return (
     <div>
       <div className="mb-6 grid grid-cols-3 gap-4">
         <div className={tarjeta}>
-          <p className="font-titulo text-3xl font-bold text-bosque">
+          <p className="font-titulo text-4xl font-semibold text-mar">
             {librosLeidos}
           </p>
-          <p className="text-sm text-cafe">libros</p>
+          <p className="text-sm text-texto-suave">libros</p>
         </div>
         <div className={tarjeta}>
-          <p className="font-titulo text-3xl font-bold text-bosque">
+          <p className="font-titulo text-4xl font-semibold text-mar">
             {paises.length}
           </p>
-          <p className="text-sm text-cafe">países</p>
+          <p className="text-sm text-texto-suave">países</p>
         </div>
         <div className={tarjeta}>
-          <p className="font-titulo text-3xl font-bold text-bosque">
+          <p className="font-titulo text-4xl font-semibold text-mar">
             {lugares.length}
           </p>
-          <p className="text-sm text-cafe">lugares</p>
+          <p className="text-sm text-texto-suave">lugares</p>
         </div>
       </div>
 
       <MapaCargador lugares={lugares} />
 
-      <h2 className="mt-8 font-titulo text-2xl font-bold text-bosque">
+      <h2 className="mt-10 font-titulo text-3xl font-semibold text-mar-oscuro">
         Países explorados
       </h2>
-      <ul className="mt-3 flex flex-wrap gap-2">
+      <ul className="mt-4 flex flex-wrap gap-2">
         {paises.map((p) => (
           <li
             key={p}
-            className="rounded-full border border-dorado bg-crema px-3 py-1 text-sm text-bosque"
+            className="rounded-full border border-mar bg-papel px-3 py-1 text-sm text-mar"
           >
             {p}
           </li>

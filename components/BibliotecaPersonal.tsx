@@ -48,12 +48,14 @@ export default function BibliotecaPersonal() {
   const titulo = (f: Fila) =>
     (Array.isArray(f.libros) ? f.libros[0] : f.libros)?.titulo ?? "";
 
-  if (estado === "cargando") return <p className="text-cafe">Cargando...</p>;
+  if (estado === "cargando") {
+    return <p className="text-texto-suave">Cargando...</p>;
+  }
 
   if (estado === "sin-sesion") {
     return (
-      <p className="text-cafe">
-        <Link href="/acceso" className="font-semibold text-bosque underline">
+      <p className="text-texto-suave">
+        <Link href="/acceso" className="font-semibold text-mar underline">
           Inicia sesión
         </Link>{" "}
         para ver tu biblioteca.
@@ -64,12 +66,12 @@ export default function BibliotecaPersonal() {
   const favoritos = filas.filter((f) => f.es_favorito);
 
   const lista = (items: Fila[]) => (
-    <ul className="mt-3 space-y-2">
+    <ul className="mt-3 border-t-2 border-mar">
       {items.map((f) => (
-        <li key={f.libro_id}>
+        <li key={f.libro_id} className="border-b border-arena-clara">
           <Link
             href={`/libros/${f.libro_id}`}
-            className="text-bosque hover:text-dorado"
+            className="block py-3 font-titulo text-xl font-semibold text-mar transition-colors hover:text-coral"
           >
             {titulo(f)}
           </Link>
@@ -79,13 +81,13 @@ export default function BibliotecaPersonal() {
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       {error && <p className="text-red-700">{error}</p>}
 
       {filas.length === 0 && (
-        <p className="text-cafe">
+        <p className="text-texto-suave">
           Aún no guardaste ningún libro. Entra a un libro del{" "}
-          <Link href="/libros" className="font-semibold text-bosque underline">
+          <Link href="/libros" className="font-semibold text-mar underline">
             catálogo
           </Link>{" "}
           y márcalo.
@@ -94,7 +96,7 @@ export default function BibliotecaPersonal() {
 
       {favoritos.length > 0 && (
         <section>
-          <h2 className="font-titulo text-2xl font-bold text-dorado">
+          <h2 className="font-titulo text-3xl font-semibold text-mar-oscuro">
             ★ Favoritos
           </h2>
           {lista(favoritos)}
@@ -106,7 +108,7 @@ export default function BibliotecaPersonal() {
         if (items.length === 0) return null;
         return (
           <section key={s.clave}>
-            <h2 className="font-titulo text-2xl font-bold text-bosque">
+            <h2 className="font-titulo text-3xl font-semibold text-mar-oscuro">
               {s.titulo}
             </h2>
             {lista(items)}
