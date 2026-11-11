@@ -49,7 +49,13 @@ export default function Resenas({ libroId }: { libroId: number }) {
   }, [libroId]);
 
   useEffect(() => {
-    cargar();
+    let activo = true;
+    Promise.resolve().then(() => {
+      if (activo) cargar();
+    });
+    return () => {
+      activo = false;
+    };
   }, [cargar]);
 
   async function enviar(e: React.FormEvent) {
