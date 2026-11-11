@@ -33,13 +33,15 @@ async function MapaConLugares() {
 export default function MapaPage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <h1 className="font-titulo text-4xl font-bold text-bosque">
+      <h1 className="font-titulo text-5xl font-semibold text-mar-oscuro">
         Mapa literario
       </h1>
-      <p className="mt-2 mb-8 text-cafe">
+      <p className="mb-8 mt-3 max-w-xl text-lg text-texto-suave">
         Recorre el mundo siguiendo los lugares de cada novela.
       </p>
-      <Suspense fallback={<p className="text-cafe">Cargando lugares...</p>}>
+      <Suspense
+        fallback={<p className="text-texto-suave">Cargando lugares...</p>}
+      >
         <MapaConLugares />
       </Suspense>
     </main>

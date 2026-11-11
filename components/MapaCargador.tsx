@@ -5,7 +5,7 @@ import type { Lugar } from "./MapaMundial";
 
 const MapaMundial = dynamic(() => import("./MapaMundial"), {
   ssr: false,
-  loading: () => <p className="text-cafe">Cargando mapa...</p>,
+  loading: () => <p className="text-texto-suave">Cargando mapa...</p>,
 });
 
 export default function MapaCargador({ lugares }: { lugares: Lugar[] }) {

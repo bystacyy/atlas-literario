@@ -21,9 +21,9 @@ export type Lugar = {
   libro: string;
 };
 
-const iconoDorado = L.divIcon({
+const iconoCoral = L.divIcon({
   className: "",
-  html: '<div style="width:18px;height:18px;border-radius:9999px;background:#b8923a;border:3px solid #1f3d2f;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>',
+  html: '<div style="width:18px;height:18px;border-radius:9999px;background:#e8735a;border:3px solid #12312f;box-shadow:0 1px 4px rgba(0,0,0,.4)"></div>',
   iconSize: [18, 18],
   iconAnchor: [9, 9],
   popupAnchor: [0, -10],
@@ -40,8 +40,8 @@ export default function MapaMundial({ lugares }: { lugares: Lugar[] }) {
   const claseBoton = (activo: boolean) =>
     `rounded-full border px-4 py-1.5 text-sm transition-colors ${
       activo
-        ? "border-bosque bg-bosque text-crema"
-        : "border-arena bg-pergamino text-cafe hover:border-dorado"
+        ? "border-mar bg-mar text-papel"
+        : "border-arena-clara bg-papel text-texto-suave hover:border-mar"
     }`;
 
   return (
@@ -69,7 +69,7 @@ export default function MapaMundial({ lugares }: { lugares: Lugar[] }) {
         zoom={2}
         minZoom={2}
         scrollWheelZoom={true}
-        className="h-[70vh] w-full rounded-lg border border-arena"
+        className="h-[70vh] w-full rounded-2xl border border-arena-clara"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -79,7 +79,7 @@ export default function MapaMundial({ lugares }: { lugares: Lugar[] }) {
         {libroActivo && (
           <Polyline
             positions={visibles.map((l) => [l.latitud, l.longitud])}
-            pathOptions={{ color: "#1f3d2f", weight: 3, dashArray: "8 8" }}
+            pathOptions={{ color: "#1f5f5b", weight: 3, dashArray: "8 8" }}
           />
         )}
 
@@ -87,7 +87,7 @@ export default function MapaMundial({ lugares }: { lugares: Lugar[] }) {
           <Marker
             key={lugar.id}
             position={[lugar.latitud, lugar.longitud]}
-            icon={iconoDorado}
+            icon={iconoCoral}
           >
             <Popup>
               <strong>{lugar.nombre}</strong>
