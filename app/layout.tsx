@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Newsreader, DM_Sans } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -27,8 +28,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" className={`${newsreader.variable} ${dmSans.variable}`}>
-      <body>
-        <Navbar />
+      <body className="pb-20 md:pb-0">
+        <Suspense
+          fallback={
+            <header className="h-[69px] border-b border-arena-clara bg-papel" />
+          }
+        >
+          <Navbar />
+        </Suspense>
         {children}
       </body>
     </html>
