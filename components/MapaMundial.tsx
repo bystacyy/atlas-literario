@@ -1,8 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import {
+  MapContainer,
+  Marker,
+  Polyline,
+  Popup,
+  TileLayer,
+} from "react-leaflet";
 
 export type Lugar = {
   id: number;
@@ -23,34 +30,75 @@ const iconoDorado = L.divIcon({
 });
 
 export default function MapaMundial({ lugares }: { lugares: Lugar[] }) {
-  return (
-    <MapContainer
-      center={[25, 10]}
-      zoom={2}
-      minZoom={2}
-      scrollWheelZoom={true}
-      className="h-[70vh] w-full rounded-lg border border-arena"
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+  const [libroActivo, setLibroActivo] = useState<string | null>(null);
 
-      {lugares.map((lugar) => (
-        <Marker
-          key={lugar.id}
-          position={[lugar.latitud, lugar.longitud]}
-          icon={iconoDorado}
+  const libros = Array.from(new Set(lugares.map((l) => l.libro)));
+  const visibles = libroActivo
+    ? lugares.filter((l) => l.libro === libroActivo)
+    : lugares;
+
+  const claseBoton = (activo: boolean) =>
+    `rounded-full border px-4 py-1.5 text-sm transition-colors ${
+      activo
+        ? "border-bosque bg-bosque text-crema"
+        : "border-arena bg-pergamino text-cafe hover:border-dorado"
+    }`;
+
+  return (
+    <div>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <button
+          onClick={() => setLibroActivo(null)}
+          className={claseBoton(libroActivo === null)}
         >
-          <Popup>
-            <strong>{lugar.nombre}</strong>
-            {lugar.pais && <span> ({lugar.pais})</span>}
-            <br />
-            <em>{lugar.libro}</em>
-            {lugar.descripcion && <p>{lugar.descripcion}</p>}
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+          Todos
+        </button>
+        {libros.map((libro) => (
+          <button
+            key={libro}
+            onClick={() => setLibroActivo(libro)}
+            className={claseBoton(libroActivo === libro)}
+          >
+            {libro}
+          </button>
+        ))}
+      </div>
+
+      <MapContainer
+        center={[25, 10]}
+        zoom={2}
+        minZoom={2}
+        scrollWheelZoom={true}
+        className="h-[70vh] w-full rounded-lg border border-arena"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        {libroActivo && (
+          <Polyline
+            positions={visibles.map((l) => [l.latitud, l.longitud])}
+            pathOptions={{ color: "#1f3d2f", weight: 3, dashArray: "8 8" }}
+          />
+        )}
+
+        {visibles.map((lugar) => (
+          <Marker
+            key={lugar.id}
+            position={[lugar.latitud, lugar.longitud]}
+            icon={iconoDorado}
+          >
+            <Popup>
+              <strong>{lugar.nombre}</strong>
+              {lugar.pais && <span> ({lugar.pais})</span>}
+              <br />
+              <em>{lugar.libro}</em>
+              {lugar.descripcion && <p>{lugar.descripcion}</p>}
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
   );
 }
