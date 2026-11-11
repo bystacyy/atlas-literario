@@ -44,13 +44,15 @@ async function GrafoConDatos() {
 export default function PersonajesPage() {
   return (
     <main className="mx-auto max-w-6xl px-6 py-12">
-      <h1 className="font-titulo text-4xl font-bold text-bosque">
+      <h1 className="font-titulo text-5xl font-semibold text-mar-oscuro">
         Grafo de personajes
       </h1>
-      <p className="mt-2 mb-8 text-cafe">
+      <p className="mb-8 mt-3 max-w-xl text-lg text-texto-suave">
         Descubre quién es amigo, rival, familia o amor de quién.
       </p>
-      <Suspense fallback={<p className="text-cafe">Cargando personajes...</p>}>
+      <Suspense
+        fallback={<p className="text-texto-suave">Cargando personajes...</p>}
+      >
         <GrafoConDatos />
       </Suspense>
     </main>

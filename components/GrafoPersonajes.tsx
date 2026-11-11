@@ -29,33 +29,47 @@ export type Relacion = {
 };
 
 const colores: Record<Relacion["tipo"], string> = {
-  amistad: "#1f3d2f",
-  familia: "#5b4030",
+  amistad: "#1f5f5b",
+  familia: "#8a6d3b",
   rivalidad: "#b3261e",
   romance: "#c2528b",
 };
 
-type DatosNodo = { nombre: string; central: boolean; estado: "normal" | "activo" | "atenuado" };
+type DatosNodo = {
+  nombre: string;
+  central: boolean;
+  estado: "normal" | "activo" | "atenuado";
+};
 
 function NodoPersonaje({ data }: NodeProps<Node<DatosNodo>>) {
   const { nombre, central, estado } = data;
   return (
     <div
-      className="font-titulo text-center shadow-sm transition-all"
+      className="text-center font-titulo shadow-sm transition-all"
       style={{
         padding: central ? "14px 22px" : "10px 16px",
         fontSize: central ? 16 : 14,
         fontWeight: central ? 700 : 500,
         borderRadius: 10,
-        background: estado === "activo" ? "#b8923a" : central ? "#1f3d2f" : "#fbf7ee",
-        color: estado === "activo" ? "#2b2118" : central ? "#fbf7ee" : "#1f3d2f",
-        border: `2px solid ${estado === "activo" ? "#2b2118" : "#b8923a"}`,
+        background:
+          estado === "activo" ? "#e8735a" : central ? "#1f5f5b" : "#fcfaf5",
+        color:
+          estado === "activo" ? "#12312f" : central ? "#fcfaf5" : "#12312f",
+        border: `2px solid ${estado === "activo" ? "#12312f" : "#1f5f5b"}`,
         opacity: estado === "atenuado" ? 0.25 : 1,
       }}
     >
-      <Handle type="target" position={Position.Top} style={{ opacity: 0, top: "50%" }} />
+      <Handle
+        type="target"
+        position={Position.Top}
+        style={{ opacity: 0, top: "50%" }}
+      />
       {nombre}
-      <Handle type="source" position={Position.Top} style={{ opacity: 0, top: "50%" }} />
+      <Handle
+        type="source"
+        position={Position.Top}
+        style={{ opacity: 0, top: "50%" }}
+      />
     </div>
   );
 }
@@ -184,8 +198,8 @@ export default function GrafoPersonajes({
   const claseBoton = (activo: boolean) =>
     `rounded-full border px-4 py-1.5 text-sm transition-colors ${
       activo
-        ? "border-bosque bg-bosque text-crema"
-        : "border-arena bg-pergamino text-cafe hover:border-dorado"
+        ? "border-mar bg-mar text-papel"
+        : "border-arena-clara bg-papel text-texto-suave hover:border-mar"
     }`;
 
   return (
@@ -207,7 +221,10 @@ export default function GrafoPersonajes({
 
       <div className="mb-4 flex flex-wrap gap-5 text-sm">
         {Object.entries(colores).map(([tipo, color]) => (
-          <span key={tipo} className="flex items-center gap-2 capitalize text-cafe">
+          <span
+            key={tipo}
+            className="flex items-center gap-2 capitalize text-texto-suave"
+          >
             <span
               className="inline-block h-1 w-7 rounded"
               style={{ background: color }}
@@ -218,7 +235,7 @@ export default function GrafoPersonajes({
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <div className="h-[65vh] rounded-lg border border-arena bg-pergamino">
+        <div className="h-[65vh] rounded-2xl border border-arena-clara bg-papel">
           <ReactFlow
             key={libroActivo}
             nodes={nodos}
@@ -229,22 +246,23 @@ export default function GrafoPersonajes({
             fitView
             fitViewOptions={{ padding: 0.25 }}
             nodesConnectable={false}
-            proOptions={{ hideAttribution: false }}
           >
-            <Background gap={28} color="#e6d8bb" />
+            <Background gap={28} color="#e9dfc8" />
             <Controls showInteractive={false} />
           </ReactFlow>
         </div>
 
-        <aside className="rounded-lg border border-arena bg-crema p-5">
+        <aside className="rounded-2xl border border-arena-clara bg-papel p-5">
           {personaje ? (
             <>
-              <h2 className="font-titulo text-2xl font-bold text-bosque">
+              <h2 className="font-titulo text-2xl font-semibold text-mar-oscuro">
                 {personaje.nombre}
               </h2>
-              <p className="mt-2 text-sm text-cafe">{personaje.descripcion}</p>
-              <h3 className="mt-5 font-semibold text-bosque">Relaciones</h3>
-              <ul className="mt-2 space-y-3 text-sm text-cafe">
+              <p className="mt-2 text-sm text-texto-suave">
+                {personaje.descripcion}
+              </p>
+              <h3 className="mt-5 font-semibold text-mar">Relaciones</h3>
+              <ul className="mt-2 space-y-3 text-sm text-texto-suave">
                 {vinculos.map((v) => (
                   <li key={v.id} className="flex gap-2">
                     <span
@@ -252,7 +270,7 @@ export default function GrafoPersonajes({
                       style={{ background: colores[v.tipo] }}
                     />
                     <span>
-                      <strong className="text-tinta">{v.nombre}</strong>{" "}
+                      <strong className="text-mar-oscuro">{v.nombre}</strong>{" "}
                       <span className="capitalize">· {v.tipo}</span>
                       <br />
                       {v.descripcion}
@@ -262,7 +280,7 @@ export default function GrafoPersonajes({
               </ul>
             </>
           ) : (
-            <p className="text-sm text-cafe">
+            <p className="text-sm text-texto-suave">
               Haz clic en un personaje para ver su descripción y resaltar sus
               relaciones. Haz clic en el fondo para quitar la selección.
             </p>
