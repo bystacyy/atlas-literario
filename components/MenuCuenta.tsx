@@ -91,6 +91,14 @@ export default function MenuCuenta() {
           role="menu"
           className="absolute right-0 z-[1100] mt-2 w-52 rounded-lg border border-arena-clara bg-papel p-1 shadow-lg"
         >
+                    <Link
+            href="/perfil/editar"
+            role="menuitem"
+            onClick={() => setAbierto(false)}
+            className={claseItem}
+          >
+            Mi perfil
+          </Link>
           <Link
             href="/biblioteca"
             role="menuitem"
